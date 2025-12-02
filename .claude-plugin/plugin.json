@@ -1,0 +1,8 @@
+{
+    "name": "hiragram-plugin-exp",
+    "description": "Experimental plugins",
+    "version": "0.1.0",
+    "author": {
+        "name": "hiragram"
+    }
+}
