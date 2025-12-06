@@ -1,99 +1,123 @@
 import SwiftUI
 
-// MARK: - App Text Field Style
+// MARK: - Themed Text Field Style
 
-struct AppTextFieldStyle: TextFieldStyle {
-    @FocusState private var isFocused: Bool
+struct ThemedTextFieldStyle: TextFieldStyle {
+    let theme: DesignSystem
     let isError: Bool
 
-    init(isError: Bool = false) {
+    init(theme: DesignSystem = .default, isError: Bool = false) {
+        self.theme = theme
         self.isError = isError
     }
 
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .font(.bodyLarge)
-            .padding(.horizontal, Spacing.md)
-            .padding(.vertical, Spacing.sm)
-            .background(Color.backgroundTertiary)
-            .cornerRadius(CornerRadius.sm)
+            .font(theme.typography.bodyLarge)
+            .padding(.horizontal, theme.spacing.md)
+            .padding(.vertical, theme.spacing.sm)
+            .background(theme.colors.backgroundTertiary)
+            .cornerRadius(theme.cornerRadius.sm)
             .overlay(
-                RoundedRectangle(cornerRadius: CornerRadius.sm)
+                RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
                     .stroke(borderColor, lineWidth: 1)
             )
     }
 
     private var borderColor: Color {
-        if isError {
-            return .error
-        }
-        return .border
+        isError ? theme.colors.error : theme.colors.border
     }
 }
 
-// MARK: - Labeled Text Field
+// MARK: - Themed Labeled Text Field
 
-struct LabeledTextField: View {
+struct ThemedLabeledTextField: View {
+    let theme: DesignSystem
     let label: String
     let placeholder: String
     @Binding var text: String
     var errorMessage: String?
     var isSecure: Bool = false
 
+    init(
+        theme: DesignSystem = .default,
+        label: String,
+        placeholder: String,
+        text: Binding<String>,
+        errorMessage: String? = nil,
+        isSecure: Bool = false
+    ) {
+        self.theme = theme
+        self.label = label
+        self.placeholder = placeholder
+        self._text = text
+        self.errorMessage = errorMessage
+        self.isSecure = isSecure
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
+        VStack(alignment: .leading, spacing: theme.spacing.xs) {
             Text(label)
-                .font(.headlineSmall)
-                .foregroundColor(.textSecondary)
+                .font(theme.typography.headlineSmall)
+                .foregroundColor(theme.colors.textSecondary)
 
             if isSecure {
                 SecureField(placeholder, text: $text)
-                    .textFieldStyle(AppTextFieldStyle(isError: errorMessage != nil))
+                    .textFieldStyle(ThemedTextFieldStyle(theme: theme, isError: errorMessage != nil))
             } else {
                 TextField(placeholder, text: $text)
-                    .textFieldStyle(AppTextFieldStyle(isError: errorMessage != nil))
+                    .textFieldStyle(ThemedTextFieldStyle(theme: theme, isError: errorMessage != nil))
             }
 
             if let error = errorMessage {
                 Text(error)
-                    .font(.captionLarge)
-                    .foregroundColor(.error)
+                    .font(theme.typography.captionLarge)
+                    .foregroundColor(theme.colors.error)
             }
         }
     }
 }
 
-// MARK: - Search Field Style
+// MARK: - Themed Search Field Style
 
-struct SearchFieldStyle: TextFieldStyle {
+struct ThemedSearchFieldStyle: TextFieldStyle {
+    let theme: DesignSystem
+
+    init(theme: DesignSystem = .default) {
+        self.theme = theme
+    }
+
     func _body(configuration: TextField<Self._Label>) -> some View {
-        HStack(spacing: Spacing.xs) {
+        HStack(spacing: theme.spacing.xs) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.textSecondary)
-                .frame(width: Layout.iconSize, height: Layout.iconSize)
+                .foregroundColor(theme.colors.textSecondary)
+                .frame(width: theme.layout.iconSize, height: theme.layout.iconSize)
 
             configuration
-                .font(.bodyMedium)
+                .font(theme.typography.bodyMedium)
         }
-        .padding(.horizontal, Spacing.sm)
-        .padding(.vertical, Spacing.xs)
-        .background(Color.backgroundSecondary)
-        .cornerRadius(CornerRadius.sm)
+        .padding(.horizontal, theme.spacing.sm)
+        .padding(.vertical, theme.spacing.xs)
+        .background(theme.colors.backgroundSecondary)
+        .cornerRadius(theme.cornerRadius.sm)
     }
 }
 
 // MARK: - Usage Example
 /*
+let theme = DesignSystem.default
+
 // Basic text field
 TextField("Enter name", text: $name)
-    .textFieldStyle(AppTextFieldStyle())
+    .textFieldStyle(ThemedTextFieldStyle(theme: theme))
 
 // With error state
 TextField("Enter email", text: $email)
-    .textFieldStyle(AppTextFieldStyle(isError: true))
+    .textFieldStyle(ThemedTextFieldStyle(theme: theme, isError: true))
 
 // Labeled text field
-LabeledTextField(
+ThemedLabeledTextField(
+    theme: theme,
     label: "Email",
     placeholder: "your@email.com",
     text: $email,
@@ -101,7 +125,8 @@ LabeledTextField(
 )
 
 // Password field
-LabeledTextField(
+ThemedLabeledTextField(
+    theme: theme,
     label: "Password",
     placeholder: "Enter password",
     text: $password,
@@ -110,5 +135,9 @@ LabeledTextField(
 
 // Search field
 TextField("Search...", text: $searchText)
-    .textFieldStyle(SearchFieldStyle())
+    .textFieldStyle(ThemedSearchFieldStyle(theme: theme))
+
+// With different theme
+TextField("Name", text: $name)
+    .textFieldStyle(ThemedTextFieldStyle(theme: .pop))
 */

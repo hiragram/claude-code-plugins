@@ -1,117 +1,147 @@
 import SwiftUI
 
-// MARK: - Spacing Scale (8pt Grid)
+// MARK: - Spacing Scale
 
-enum Spacing {
-    /// 4pt - Micro spacing for tight layouts
-    static let xxs: CGFloat = 4
-
-    /// 8pt - Extra small spacing
-    static let xs: CGFloat = 8
-
-    /// 12pt - Small spacing
-    static let sm: CGFloat = 12
-
-    /// 16pt - Medium spacing (default)
-    static let md: CGFloat = 16
-
-    /// 24pt - Large spacing
-    static let lg: CGFloat = 24
-
-    /// 32pt - Extra large spacing
-    static let xl: CGFloat = 32
-
-    /// 48pt - 2X large spacing
-    static let xxl: CGFloat = 48
-
-    /// 64pt - 3X large spacing
-    static let xxxl: CGFloat = 64
+struct SpacingScale {
+    let xxs: CGFloat  // Micro spacing
+    let xs: CGFloat   // Extra small
+    let sm: CGFloat   // Small
+    let md: CGFloat   // Medium (default)
+    let lg: CGFloat   // Large
+    let xl: CGFloat   // Extra large
+    let xxl: CGFloat  // 2X large
+    let xxxl: CGFloat // 3X large
 }
 
-// MARK: - Corner Radius
+extension SpacingScale {
+    /// 8pt grid system
+    static let `default` = SpacingScale(
+        xxs: 4,
+        xs: 8,
+        sm: 12,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        xxl: 48,
+        xxxl: 64
+    )
 
-enum CornerRadius {
-    /// 4pt - Small radius for tags, badges
-    static let xs: CGFloat = 4
-
-    /// 8pt - Medium radius for buttons, inputs
-    static let sm: CGFloat = 8
-
-    /// 12pt - Large radius for cards
-    static let md: CGFloat = 12
-
-    /// 16pt - Extra large radius for modals
-    static let lg: CGFloat = 16
-
-    /// 24pt - Full radius for pills
-    static let xl: CGFloat = 24
-
-    /// Circular - for avatars, icons
-    static let full: CGFloat = .infinity
+    /// Compact spacing for dense UIs
+    static let compact = SpacingScale(
+        xxs: 2,
+        xs: 4,
+        sm: 8,
+        md: 12,
+        lg: 16,
+        xl: 24,
+        xxl: 32,
+        xxxl: 48
+    )
 }
 
-// MARK: - Shadow Styles
+// MARK: - Corner Radius Scale
 
-struct AppShadow {
+struct CornerRadiusScale {
+    let xs: CGFloat   // Tags, badges
+    let sm: CGFloat   // Buttons, inputs
+    let md: CGFloat   // Cards
+    let lg: CGFloat   // Modals
+    let xl: CGFloat   // Pills
+    let full: CGFloat // Circular
+}
+
+extension CornerRadiusScale {
+    static let `default` = CornerRadiusScale(
+        xs: 4,
+        sm: 8,
+        md: 12,
+        lg: 16,
+        xl: 24,
+        full: .infinity
+    )
+
+    /// Sharp corners for minimal/modern style
+    static let sharp = CornerRadiusScale(
+        xs: 0,
+        sm: 2,
+        md: 4,
+        lg: 6,
+        xl: 8,
+        full: .infinity
+    )
+
+    /// Rounded corners for friendly/soft style
+    static let rounded = CornerRadiusScale(
+        xs: 8,
+        sm: 12,
+        md: 16,
+        lg: 20,
+        xl: 28,
+        full: .infinity
+    )
+}
+
+// MARK: - Shadow Scale
+
+struct ShadowStyle {
     let color: Color
     let radius: CGFloat
     let x: CGFloat
     let y: CGFloat
-
-    /// Small shadow - subtle elevation
-    static let sm = AppShadow(
-        color: Color.black.opacity(0.08),
-        radius: 4,
-        x: 0,
-        y: 2
-    )
-
-    /// Medium shadow - card elevation
-    static let md = AppShadow(
-        color: Color.black.opacity(0.12),
-        radius: 8,
-        x: 0,
-        y: 4
-    )
-
-    /// Large shadow - modal elevation
-    static let lg = AppShadow(
-        color: Color.black.opacity(0.16),
-        radius: 16,
-        x: 0,
-        y: 8
-    )
 }
 
-extension View {
-    func appShadow(_ shadow: AppShadow) -> some View {
-        self.shadow(
-            color: shadow.color,
-            radius: shadow.radius,
-            x: shadow.x,
-            y: shadow.y
-        )
-    }
+struct ShadowScale {
+    let sm: ShadowStyle  // Subtle elevation
+    let md: ShadowStyle  // Card elevation
+    let lg: ShadowStyle  // Modal elevation
+}
+
+extension ShadowScale {
+    static let `default` = ShadowScale(
+        sm: ShadowStyle(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2),
+        md: ShadowStyle(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 4),
+        lg: ShadowStyle(color: Color.black.opacity(0.16), radius: 16, x: 0, y: 8)
+    )
+
+    /// No shadows for flat design
+    static let none = ShadowScale(
+        sm: ShadowStyle(color: .clear, radius: 0, x: 0, y: 0),
+        md: ShadowStyle(color: .clear, radius: 0, x: 0, y: 0),
+        lg: ShadowStyle(color: .clear, radius: 0, x: 0, y: 0)
+    )
 }
 
 // MARK: - Layout Constants
 
-enum Layout {
-    /// Standard horizontal padding for screens
-    static let horizontalPadding: CGFloat = Spacing.md
+struct LayoutConstants {
+    let horizontalPadding: CGFloat
+    let verticalPadding: CGFloat
+    let minTouchTarget: CGFloat
+    let iconSizeSmall: CGFloat
+    let iconSize: CGFloat
+    let iconSizeLarge: CGFloat
+}
 
-    /// Standard vertical padding for screens
-    static let verticalPadding: CGFloat = Spacing.md
+extension LayoutConstants {
+    static let `default` = LayoutConstants(
+        horizontalPadding: 16,
+        verticalPadding: 16,
+        minTouchTarget: 44,
+        iconSizeSmall: 16,
+        iconSize: 24,
+        iconSizeLarge: 32
+    )
+}
 
-    /// Minimum touch target size (44pt - Apple HIG)
-    static let minTouchTarget: CGFloat = 44
+// MARK: - View Extension
 
-    /// Standard icon size
-    static let iconSize: CGFloat = 24
-
-    /// Small icon size
-    static let iconSizeSmall: CGFloat = 16
-
-    /// Large icon size
-    static let iconSizeLarge: CGFloat = 32
+extension View {
+    func shadow(_ style: ShadowStyle) -> some View {
+        self.shadow(
+            color: style.color,
+            radius: style.radius,
+            x: style.x,
+            y: style.y
+        )
+    }
 }

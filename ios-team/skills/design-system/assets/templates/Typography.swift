@@ -1,85 +1,77 @@
 import SwiftUI
 
-// MARK: - Typography Scale
+// MARK: - Typography
 
-extension Font {
+struct Typography {
+    // Display
+    let displayLarge: Font
+    let displayMedium: Font
+    let displaySmall: Font
 
-    // MARK: Display
+    // Headline
+    let headlineLarge: Font
+    let headlineMedium: Font
+    let headlineSmall: Font
 
-    /// Large title - 34pt Bold - Hero sections, onboarding
-    static let displayLarge = Font.system(size: 34, weight: .bold, design: .default)
+    // Body
+    let bodyLarge: Font
+    let bodyMedium: Font
+    let bodySmall: Font
 
-    /// Medium title - 28pt Bold - Section headers
-    static let displayMedium = Font.system(size: 28, weight: .bold, design: .default)
+    // Caption
+    let captionLarge: Font
+    let captionSmall: Font
 
-    /// Small title - 22pt Bold - Card titles
-    static let displaySmall = Font.system(size: 22, weight: .bold, design: .default)
-
-    // MARK: Headline
-
-    /// Large headline - 17pt Semibold - List item titles
-    static let headlineLarge = Font.system(size: 17, weight: .semibold, design: .default)
-
-    /// Medium headline - 15pt Semibold - Subheadings
-    static let headlineMedium = Font.system(size: 15, weight: .semibold, design: .default)
-
-    /// Small headline - 13pt Semibold - Labels
-    static let headlineSmall = Font.system(size: 13, weight: .semibold, design: .default)
-
-    // MARK: Body
-
-    /// Large body - 17pt Regular - Primary body text
-    static let bodyLarge = Font.system(size: 17, weight: .regular, design: .default)
-
-    /// Medium body - 15pt Regular - Secondary body text
-    static let bodyMedium = Font.system(size: 15, weight: .regular, design: .default)
-
-    /// Small body - 13pt Regular - Tertiary text, captions
-    static let bodySmall = Font.system(size: 13, weight: .regular, design: .default)
-
-    // MARK: Caption
-
-    /// Large caption - 12pt Regular - Supporting text
-    static let captionLarge = Font.system(size: 12, weight: .regular, design: .default)
-
-    /// Small caption - 11pt Regular - Fine print, timestamps
-    static let captionSmall = Font.system(size: 11, weight: .regular, design: .default)
-
-    // MARK: Button
-
-    /// Large button text - 17pt Semibold
-    static let buttonLarge = Font.system(size: 17, weight: .semibold, design: .default)
-
-    /// Medium button text - 15pt Semibold
-    static let buttonMedium = Font.system(size: 15, weight: .semibold, design: .default)
-
-    /// Small button text - 13pt Medium
-    static let buttonSmall = Font.system(size: 13, weight: .medium, design: .default)
+    // Button
+    let buttonLarge: Font
+    let buttonMedium: Font
+    let buttonSmall: Font
 }
 
-// MARK: - Text Style Modifier
+// MARK: - Default Instance
 
-struct AppTextStyle: ViewModifier {
-    let font: Font
-    let color: Color
-    let lineSpacing: CGFloat
+extension Typography {
+    static let `default` = Typography(
+        // Display
+        displayLarge: .system(size: 34, weight: .bold, design: .default),
+        displayMedium: .system(size: 28, weight: .bold, design: .default),
+        displaySmall: .system(size: 22, weight: .bold, design: .default),
 
-    init(font: Font, color: Color = .textPrimary, lineSpacing: CGFloat = 0) {
-        self.font = font
-        self.color = color
-        self.lineSpacing = lineSpacing
-    }
+        // Headline
+        headlineLarge: .system(size: 17, weight: .semibold, design: .default),
+        headlineMedium: .system(size: 15, weight: .semibold, design: .default),
+        headlineSmall: .system(size: 13, weight: .semibold, design: .default),
 
-    func body(content: Content) -> some View {
-        content
-            .font(font)
-            .foregroundColor(color)
-            .lineSpacing(lineSpacing)
-    }
-}
+        // Body
+        bodyLarge: .system(size: 17, weight: .regular, design: .default),
+        bodyMedium: .system(size: 15, weight: .regular, design: .default),
+        bodySmall: .system(size: 13, weight: .regular, design: .default),
 
-extension View {
-    func textStyle(_ font: Font, color: Color = .textPrimary, lineSpacing: CGFloat = 0) -> some View {
-        modifier(AppTextStyle(font: font, color: color, lineSpacing: lineSpacing))
-    }
+        // Caption
+        captionLarge: .system(size: 12, weight: .regular, design: .default),
+        captionSmall: .system(size: 11, weight: .regular, design: .default),
+
+        // Button
+        buttonLarge: .system(size: 17, weight: .semibold, design: .default),
+        buttonMedium: .system(size: 15, weight: .semibold, design: .default),
+        buttonSmall: .system(size: 13, weight: .medium, design: .default)
+    )
+
+    /// Rounded variant - friendly, casual feel
+    static let rounded = Typography(
+        displayLarge: .system(size: 34, weight: .bold, design: .rounded),
+        displayMedium: .system(size: 28, weight: .bold, design: .rounded),
+        displaySmall: .system(size: 22, weight: .bold, design: .rounded),
+        headlineLarge: .system(size: 17, weight: .semibold, design: .rounded),
+        headlineMedium: .system(size: 15, weight: .semibold, design: .rounded),
+        headlineSmall: .system(size: 13, weight: .semibold, design: .rounded),
+        bodyLarge: .system(size: 17, weight: .regular, design: .rounded),
+        bodyMedium: .system(size: 15, weight: .regular, design: .rounded),
+        bodySmall: .system(size: 13, weight: .regular, design: .rounded),
+        captionLarge: .system(size: 12, weight: .regular, design: .rounded),
+        captionSmall: .system(size: 11, weight: .regular, design: .rounded),
+        buttonLarge: .system(size: 17, weight: .semibold, design: .rounded),
+        buttonMedium: .system(size: 15, weight: .semibold, design: .rounded),
+        buttonSmall: .system(size: 13, weight: .medium, design: .rounded)
+    )
 }
