@@ -1,0 +1,13 @@
+{
+  "name": "hiragram-plugin-exp",
+  "owner": {
+    "name": "hiragram"
+  },
+  "plugins": [
+    {
+      "name": "ios-team",
+      "source": "./ios-team",
+      "description": "iOSアプリ開発チーム"
+    }
+  ]
+}

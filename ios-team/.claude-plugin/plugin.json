@@ -1,0 +1,22 @@
+{
+    "name": "ios-team",
+    "description": "iOSアプリ開発チーム",
+    "version": "0.1.0",
+    "mcpServers": {
+        "pbxproj": {
+            "command": "swx",
+            "args": [
+                "hiragram/pbxproj-mcp"
+            ]
+        },
+        "iossim": {
+            "command": "swx",
+            "args": [
+                "hiragram/iossim-mcp"
+            ]
+        }
+    },
+    "author": {
+        "name": "hiragram"
+    }
+}
