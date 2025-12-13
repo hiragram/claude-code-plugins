@@ -1,31 +1,54 @@
 import SwiftUI
 
+// MARK: - Adaptive Color (light/dark hex pair)
+
+struct AdaptiveColor {
+    let lightHex: String
+    let darkHex: String
+
+    var color: Color {
+        Color(light: Color(hex: lightHex), dark: Color(hex: darkHex))
+    }
+
+    var hex: String { "#\(lightHex.uppercased())" }
+
+    init(light: String, dark: String) {
+        self.lightHex = light
+        self.darkHex = dark
+    }
+
+    init(hex: String) {
+        self.lightHex = hex
+        self.darkHex = hex
+    }
+}
+
 // MARK: - Color Palette
 
 struct ColorPalette {
     // Brand
-    let primaryBrand: Color
-    let secondaryBrand: Color
+    let primaryBrand: AdaptiveColor
+    let secondaryBrand: AdaptiveColor
 
     // Background
-    let backgroundPrimary: Color
-    let backgroundSecondary: Color
-    let backgroundTertiary: Color
+    let backgroundPrimary: AdaptiveColor
+    let backgroundSecondary: AdaptiveColor
+    let backgroundTertiary: AdaptiveColor
 
     // Text
-    let textPrimary: Color
-    let textSecondary: Color
-    let textTertiary: Color
+    let textPrimary: AdaptiveColor
+    let textSecondary: AdaptiveColor
+    let textTertiary: AdaptiveColor
 
     // Semantic
-    let success: Color
-    let warning: Color
-    let error: Color
-    let info: Color
+    let success: AdaptiveColor
+    let warning: AdaptiveColor
+    let error: AdaptiveColor
+    let info: AdaptiveColor
 
     // Border & Separator
-    let separator: Color
-    let border: Color
+    let separator: AdaptiveColor
+    let border: AdaptiveColor
 }
 
 // MARK: - Default Instance
@@ -33,28 +56,28 @@ struct ColorPalette {
 extension ColorPalette {
     static let `default` = ColorPalette(
         // Brand
-        primaryBrand: Color(hex: "007AFF"),
-        secondaryBrand: Color(hex: "5856D6"),
+        primaryBrand: AdaptiveColor(hex: "007AFF"),
+        secondaryBrand: AdaptiveColor(hex: "5856D6"),
 
         // Background
-        backgroundPrimary: Color(light: .white, dark: Color(hex: "1C1C1E")),
-        backgroundSecondary: Color(light: Color(hex: "F2F2F7"), dark: Color(hex: "2C2C2E")),
-        backgroundTertiary: Color(light: Color(hex: "FFFFFF"), dark: Color(hex: "3A3A3C")),
+        backgroundPrimary: AdaptiveColor(light: "FFFFFF", dark: "1C1C1E"),
+        backgroundSecondary: AdaptiveColor(light: "F2F2F7", dark: "2C2C2E"),
+        backgroundTertiary: AdaptiveColor(light: "FFFFFF", dark: "3A3A3C"),
 
         // Text
-        textPrimary: Color(light: Color(hex: "000000"), dark: Color(hex: "FFFFFF")),
-        textSecondary: Color(light: Color(hex: "3C3C43").opacity(0.6), dark: Color(hex: "EBEBF5").opacity(0.6)),
-        textTertiary: Color(light: Color(hex: "3C3C43").opacity(0.3), dark: Color(hex: "EBEBF5").opacity(0.3)),
+        textPrimary: AdaptiveColor(light: "000000", dark: "FFFFFF"),
+        textSecondary: AdaptiveColor(light: "3C3C43", dark: "EBEBF5"),
+        textTertiary: AdaptiveColor(light: "3C3C43", dark: "EBEBF5"),
 
         // Semantic
-        success: Color(hex: "34C759"),
-        warning: Color(hex: "FF9500"),
-        error: Color(hex: "FF3B30"),
-        info: Color(hex: "007AFF"),
+        success: AdaptiveColor(hex: "34C759"),
+        warning: AdaptiveColor(hex: "FF9500"),
+        error: AdaptiveColor(hex: "FF3B30"),
+        info: AdaptiveColor(hex: "007AFF"),
 
         // Border & Separator
-        separator: Color(light: Color(hex: "3C3C43").opacity(0.3), dark: Color(hex: "545458").opacity(0.6)),
-        border: Color(light: Color(hex: "C6C6C8"), dark: Color(hex: "545458"))
+        separator: AdaptiveColor(light: "3C3C43", dark: "545458"),
+        border: AdaptiveColor(light: "C6C6C8", dark: "545458")
     )
 }
 

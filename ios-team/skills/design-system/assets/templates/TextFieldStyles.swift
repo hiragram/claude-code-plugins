@@ -13,10 +13,10 @@ struct ThemedTextFieldStyle: TextFieldStyle {
 
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .font(theme.typography.bodyLarge)
+            .font(theme.typography.bodyLarge.font)
             .padding(.horizontal, theme.spacing.md)
             .padding(.vertical, theme.spacing.sm)
-            .background(theme.colors.backgroundTertiary)
+            .background(theme.colors.backgroundTertiary.color)
             .cornerRadius(theme.cornerRadius.sm)
             .overlay(
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
@@ -25,7 +25,7 @@ struct ThemedTextFieldStyle: TextFieldStyle {
     }
 
     private var borderColor: Color {
-        isError ? theme.colors.error : theme.colors.border
+        isError ? theme.colors.error.color : theme.colors.border.color
     }
 }
 
@@ -58,8 +58,8 @@ struct ThemedLabeledTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.spacing.xs) {
             Text(label)
-                .font(theme.typography.headlineSmall)
-                .foregroundColor(theme.colors.textSecondary)
+                .font(theme.typography.headlineSmall.font)
+                .foregroundColor(theme.colors.textSecondary.color)
 
             if isSecure {
                 SecureField(placeholder, text: $text)
@@ -71,8 +71,8 @@ struct ThemedLabeledTextField: View {
 
             if let error = errorMessage {
                 Text(error)
-                    .font(theme.typography.captionLarge)
-                    .foregroundColor(theme.colors.error)
+                    .font(theme.typography.captionLarge.font)
+                    .foregroundColor(theme.colors.error.color)
             }
         }
     }
@@ -90,15 +90,15 @@ struct ThemedSearchFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         HStack(spacing: theme.spacing.xs) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(theme.colors.textSecondary)
+                .foregroundColor(theme.colors.textSecondary.color)
                 .frame(width: theme.layout.iconSize, height: theme.layout.iconSize)
 
             configuration
-                .font(theme.typography.bodyMedium)
+                .font(theme.typography.bodyMedium.font)
         }
         .padding(.horizontal, theme.spacing.sm)
         .padding(.vertical, theme.spacing.xs)
-        .background(theme.colors.backgroundSecondary)
+        .background(theme.colors.backgroundSecondary.color)
         .cornerRadius(theme.cornerRadius.sm)
     }
 }

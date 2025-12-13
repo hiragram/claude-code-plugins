@@ -1,31 +1,85 @@
 import SwiftUI
 
+// MARK: - Font Style (with metadata)
+
+struct FontStyle {
+    let baseSize: CGFloat
+    let weight: Font.Weight
+    let design: Font.Design
+    let textStyle: Font.TextStyle
+
+    init(size: CGFloat, weight: Font.Weight, design: Font.Design = .default, relativeTo textStyle: Font.TextStyle = .body) {
+        self.baseSize = size
+        self.weight = weight
+        self.design = design
+        self.textStyle = textStyle
+    }
+
+    /// Font that scales with Dynamic Type
+    var font: Font {
+        .system(size: baseSize, weight: weight, design: design)
+            .leading(.standard)
+    }
+
+    /// For use with @ScaledMetric in views
+    var size: CGFloat { baseSize }
+
+    var weightName: String {
+        switch weight {
+        case .ultraLight: return "UltraLight"
+        case .thin: return "Thin"
+        case .light: return "Light"
+        case .regular: return "Regular"
+        case .medium: return "Medium"
+        case .semibold: return "Semibold"
+        case .bold: return "Bold"
+        case .heavy: return "Heavy"
+        case .black: return "Black"
+        default: return "Regular"
+        }
+    }
+
+    var designName: String {
+        switch design {
+        case .default: return "Default"
+        case .rounded: return "Rounded"
+        case .serif: return "Serif"
+        case .monospaced: return "Mono"
+        @unknown default: return "Default"
+        }
+    }
+
+    var description: String {
+        "\(designName) \(weightName) \(Int(baseSize))pt"
+    }
+}
+
 // MARK: - Typography
 
 struct Typography {
     // Display
-    let displayLarge: Font
-    let displayMedium: Font
-    let displaySmall: Font
+    let displayLarge: FontStyle
+    let displayMedium: FontStyle
+    let displaySmall: FontStyle
 
     // Headline
-    let headlineLarge: Font
-    let headlineMedium: Font
-    let headlineSmall: Font
+    let headlineLarge: FontStyle
+    let headlineMedium: FontStyle
+    let headlineSmall: FontStyle
 
     // Body
-    let bodyLarge: Font
-    let bodyMedium: Font
-    let bodySmall: Font
+    let bodyLarge: FontStyle
+    let bodyMedium: FontStyle
+    let bodySmall: FontStyle
 
     // Caption
-    let captionLarge: Font
-    let captionSmall: Font
+    let captionLarge: FontStyle
+    let captionSmall: FontStyle
 
     // Button
-    let buttonLarge: Font
-    let buttonMedium: Font
-    let buttonSmall: Font
+    let buttonLarge: FontStyle
+    let buttonMedium: FontStyle
+    let buttonSmall: FontStyle
 }
 
 // MARK: - Default Instance
@@ -33,45 +87,45 @@ struct Typography {
 extension Typography {
     static let `default` = Typography(
         // Display
-        displayLarge: .system(size: 34, weight: .bold, design: .default),
-        displayMedium: .system(size: 28, weight: .bold, design: .default),
-        displaySmall: .system(size: 22, weight: .bold, design: .default),
+        displayLarge: FontStyle(size: 34, weight: .bold, relativeTo: .largeTitle),
+        displayMedium: FontStyle(size: 28, weight: .bold, relativeTo: .title),
+        displaySmall: FontStyle(size: 22, weight: .bold, relativeTo: .title2),
 
         // Headline
-        headlineLarge: .system(size: 17, weight: .semibold, design: .default),
-        headlineMedium: .system(size: 15, weight: .semibold, design: .default),
-        headlineSmall: .system(size: 13, weight: .semibold, design: .default),
+        headlineLarge: FontStyle(size: 17, weight: .semibold, relativeTo: .headline),
+        headlineMedium: FontStyle(size: 15, weight: .semibold, relativeTo: .subheadline),
+        headlineSmall: FontStyle(size: 13, weight: .semibold, relativeTo: .footnote),
 
         // Body
-        bodyLarge: .system(size: 17, weight: .regular, design: .default),
-        bodyMedium: .system(size: 15, weight: .regular, design: .default),
-        bodySmall: .system(size: 13, weight: .regular, design: .default),
+        bodyLarge: FontStyle(size: 17, weight: .regular, relativeTo: .body),
+        bodyMedium: FontStyle(size: 15, weight: .regular, relativeTo: .subheadline),
+        bodySmall: FontStyle(size: 13, weight: .regular, relativeTo: .footnote),
 
         // Caption
-        captionLarge: .system(size: 12, weight: .regular, design: .default),
-        captionSmall: .system(size: 11, weight: .regular, design: .default),
+        captionLarge: FontStyle(size: 12, weight: .regular, relativeTo: .caption),
+        captionSmall: FontStyle(size: 11, weight: .regular, relativeTo: .caption2),
 
         // Button
-        buttonLarge: .system(size: 17, weight: .semibold, design: .default),
-        buttonMedium: .system(size: 15, weight: .semibold, design: .default),
-        buttonSmall: .system(size: 13, weight: .medium, design: .default)
+        buttonLarge: FontStyle(size: 17, weight: .semibold, relativeTo: .body),
+        buttonMedium: FontStyle(size: 15, weight: .semibold, relativeTo: .subheadline),
+        buttonSmall: FontStyle(size: 13, weight: .medium, relativeTo: .footnote)
     )
 
     /// Rounded variant - friendly, casual feel
     static let rounded = Typography(
-        displayLarge: .system(size: 34, weight: .bold, design: .rounded),
-        displayMedium: .system(size: 28, weight: .bold, design: .rounded),
-        displaySmall: .system(size: 22, weight: .bold, design: .rounded),
-        headlineLarge: .system(size: 17, weight: .semibold, design: .rounded),
-        headlineMedium: .system(size: 15, weight: .semibold, design: .rounded),
-        headlineSmall: .system(size: 13, weight: .semibold, design: .rounded),
-        bodyLarge: .system(size: 17, weight: .regular, design: .rounded),
-        bodyMedium: .system(size: 15, weight: .regular, design: .rounded),
-        bodySmall: .system(size: 13, weight: .regular, design: .rounded),
-        captionLarge: .system(size: 12, weight: .regular, design: .rounded),
-        captionSmall: .system(size: 11, weight: .regular, design: .rounded),
-        buttonLarge: .system(size: 17, weight: .semibold, design: .rounded),
-        buttonMedium: .system(size: 15, weight: .semibold, design: .rounded),
-        buttonSmall: .system(size: 13, weight: .medium, design: .rounded)
+        displayLarge: FontStyle(size: 34, weight: .bold, design: .rounded, relativeTo: .largeTitle),
+        displayMedium: FontStyle(size: 28, weight: .bold, design: .rounded, relativeTo: .title),
+        displaySmall: FontStyle(size: 22, weight: .bold, design: .rounded, relativeTo: .title2),
+        headlineLarge: FontStyle(size: 17, weight: .semibold, design: .rounded, relativeTo: .headline),
+        headlineMedium: FontStyle(size: 15, weight: .semibold, design: .rounded, relativeTo: .subheadline),
+        headlineSmall: FontStyle(size: 13, weight: .semibold, design: .rounded, relativeTo: .footnote),
+        bodyLarge: FontStyle(size: 17, weight: .regular, design: .rounded, relativeTo: .body),
+        bodyMedium: FontStyle(size: 15, weight: .regular, design: .rounded, relativeTo: .subheadline),
+        bodySmall: FontStyle(size: 13, weight: .regular, design: .rounded, relativeTo: .footnote),
+        captionLarge: FontStyle(size: 12, weight: .regular, design: .rounded, relativeTo: .caption),
+        captionSmall: FontStyle(size: 11, weight: .regular, design: .rounded, relativeTo: .caption2),
+        buttonLarge: FontStyle(size: 17, weight: .semibold, design: .rounded, relativeTo: .body),
+        buttonMedium: FontStyle(size: 15, weight: .semibold, design: .rounded, relativeTo: .subheadline),
+        buttonSmall: FontStyle(size: 13, weight: .medium, design: .rounded, relativeTo: .footnote)
     )
 }

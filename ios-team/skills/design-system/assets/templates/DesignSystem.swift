@@ -34,20 +34,20 @@ extension DesignSystem {
     static let minimal = DesignSystem(
         name: "Minimal",
         colors: ColorPalette(
-            primaryBrand: Color(hex: "000000"),
-            secondaryBrand: Color(hex: "6B6B6B"),
-            backgroundPrimary: Color(light: .white, dark: Color(hex: "0A0A0A")),
-            backgroundSecondary: Color(light: Color(hex: "F8F8F8"), dark: Color(hex: "1A1A1A")),
-            backgroundTertiary: Color(light: Color(hex: "F0F0F0"), dark: Color(hex: "2A2A2A")),
-            textPrimary: Color(light: Color(hex: "000000"), dark: Color(hex: "FFFFFF")),
-            textSecondary: Color(light: Color(hex: "666666"), dark: Color(hex: "999999")),
-            textTertiary: Color(light: Color(hex: "999999"), dark: Color(hex: "666666")),
-            success: Color(hex: "00C853"),
-            warning: Color(hex: "FFB300"),
-            error: Color(hex: "FF1744"),
-            info: Color(hex: "2979FF"),
-            separator: Color(light: Color(hex: "E0E0E0"), dark: Color(hex: "333333")),
-            border: Color(light: Color(hex: "E0E0E0"), dark: Color(hex: "333333"))
+            primaryBrand: AdaptiveColor(hex: "000000"),
+            secondaryBrand: AdaptiveColor(hex: "6B6B6B"),
+            backgroundPrimary: AdaptiveColor(light: "FFFFFF", dark: "0A0A0A"),
+            backgroundSecondary: AdaptiveColor(light: "F8F8F8", dark: "1A1A1A"),
+            backgroundTertiary: AdaptiveColor(light: "F0F0F0", dark: "2A2A2A"),
+            textPrimary: AdaptiveColor(light: "000000", dark: "FFFFFF"),
+            textSecondary: AdaptiveColor(light: "666666", dark: "999999"),
+            textTertiary: AdaptiveColor(light: "999999", dark: "666666"),
+            success: AdaptiveColor(hex: "00C853"),
+            warning: AdaptiveColor(hex: "FFB300"),
+            error: AdaptiveColor(hex: "FF1744"),
+            info: AdaptiveColor(hex: "2979FF"),
+            separator: AdaptiveColor(light: "E0E0E0", dark: "333333"),
+            border: AdaptiveColor(light: "E0E0E0", dark: "333333")
         ),
         typography: .default,
         spacing: .default,
@@ -60,20 +60,20 @@ extension DesignSystem {
     static let pop = DesignSystem(
         name: "Pop",
         colors: ColorPalette(
-            primaryBrand: Color(hex: "FF6B6B"),
-            secondaryBrand: Color(hex: "4ECDC4"),
-            backgroundPrimary: Color(light: .white, dark: Color(hex: "1C1C1E")),
-            backgroundSecondary: Color(light: Color(hex: "FFF9F0"), dark: Color(hex: "2C2C2E")),
-            backgroundTertiary: Color(light: Color(hex: "F0F7FF"), dark: Color(hex: "3A3A3C")),
-            textPrimary: Color(light: Color(hex: "2D3436"), dark: Color(hex: "FFFFFF")),
-            textSecondary: Color(light: Color(hex: "636E72"), dark: Color(hex: "B2BEC3")),
-            textTertiary: Color(light: Color(hex: "B2BEC3"), dark: Color(hex: "636E72")),
-            success: Color(hex: "00B894"),
-            warning: Color(hex: "FDCB6E"),
-            error: Color(hex: "E17055"),
-            info: Color(hex: "74B9FF"),
-            separator: Color(light: Color(hex: "DFE6E9"), dark: Color(hex: "4A4A4A")),
-            border: Color(light: Color(hex: "DFE6E9"), dark: Color(hex: "4A4A4A"))
+            primaryBrand: AdaptiveColor(hex: "FF6B6B"),
+            secondaryBrand: AdaptiveColor(hex: "4ECDC4"),
+            backgroundPrimary: AdaptiveColor(light: "FFFFFF", dark: "1C1C1E"),
+            backgroundSecondary: AdaptiveColor(light: "FFF9F0", dark: "2C2C2E"),
+            backgroundTertiary: AdaptiveColor(light: "F0F7FF", dark: "3A3A3C"),
+            textPrimary: AdaptiveColor(light: "2D3436", dark: "FFFFFF"),
+            textSecondary: AdaptiveColor(light: "636E72", dark: "B2BEC3"),
+            textTertiary: AdaptiveColor(light: "B2BEC3", dark: "636E72"),
+            success: AdaptiveColor(hex: "00B894"),
+            warning: AdaptiveColor(hex: "FDCB6E"),
+            error: AdaptiveColor(hex: "E17055"),
+            info: AdaptiveColor(hex: "74B9FF"),
+            separator: AdaptiveColor(light: "DFE6E9", dark: "4A4A4A"),
+            border: AdaptiveColor(light: "DFE6E9", dark: "4A4A4A")
         ),
         typography: .rounded,
         spacing: .default,
@@ -93,49 +93,52 @@ private struct DesignSystemPreview: View {
             VStack(alignment: .leading, spacing: theme.spacing.lg) {
                 // Theme Name
                 Text(theme.name)
-                    .font(theme.typography.displayLarge)
-                    .foregroundColor(theme.colors.textPrimary)
+                    .font(theme.typography.displayLarge.font)
+                    .foregroundColor(theme.colors.textPrimary.color)
 
                 // Colors Section
                 VStack(alignment: .leading, spacing: theme.spacing.sm) {
                     Text("Colors")
-                        .font(theme.typography.headlineLarge)
-                        .foregroundColor(theme.colors.textPrimary)
+                        .font(theme.typography.headlineLarge.font)
+                        .foregroundColor(theme.colors.textPrimary.color)
 
-                    HStack(spacing: theme.spacing.xs) {
-                        ColorSwatch(color: theme.colors.primaryBrand, label: "Primary")
-                        ColorSwatch(color: theme.colors.secondaryBrand, label: "Secondary")
-                        ColorSwatch(color: theme.colors.success, label: "Success")
-                        ColorSwatch(color: theme.colors.warning, label: "Warning")
-                        ColorSwatch(color: theme.colors.error, label: "Error")
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: theme.spacing.sm) {
+                        ColorSwatch(adaptiveColor: theme.colors.primaryBrand, label: "Primary")
+                        ColorSwatch(adaptiveColor: theme.colors.secondaryBrand, label: "Secondary")
+                        ColorSwatch(adaptiveColor: theme.colors.success, label: "Success")
+                        ColorSwatch(adaptiveColor: theme.colors.warning, label: "Warning")
+                        ColorSwatch(adaptiveColor: theme.colors.error, label: "Error")
+                    }
+
+                    Text("Backgrounds")
+                        .font(theme.typography.headlineSmall.font)
+                        .foregroundColor(theme.colors.textSecondary.color)
+                        .padding(.top, theme.spacing.xs)
+
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: theme.spacing.sm) {
+                        ColorSwatch(adaptiveColor: theme.colors.backgroundPrimary, label: "BG Primary", showBorder: true)
+                        ColorSwatch(adaptiveColor: theme.colors.backgroundSecondary, label: "BG Secondary", showBorder: true)
+                        ColorSwatch(adaptiveColor: theme.colors.backgroundTertiary, label: "BG Tertiary", showBorder: true)
                     }
                 }
 
                 // Typography Section
-                VStack(alignment: .leading, spacing: theme.spacing.sm) {
+                VStack(alignment: .leading, spacing: theme.spacing.md) {
                     Text("Typography")
-                        .font(theme.typography.headlineLarge)
-                        .foregroundColor(theme.colors.textPrimary)
+                        .font(theme.typography.headlineLarge.font)
+                        .foregroundColor(theme.colors.textPrimary.color)
 
-                    Text("Display Large")
-                        .font(theme.typography.displayLarge)
-                        .foregroundColor(theme.colors.textPrimary)
-                    Text("Headline Large")
-                        .font(theme.typography.headlineLarge)
-                        .foregroundColor(theme.colors.textPrimary)
-                    Text("Body Large")
-                        .font(theme.typography.bodyLarge)
-                        .foregroundColor(theme.colors.textSecondary)
-                    Text("Caption Small")
-                        .font(theme.typography.captionSmall)
-                        .foregroundColor(theme.colors.textTertiary)
+                    TypographySample(label: "Display Large", style: theme.typography.displayLarge, sampleText: "日本語表示", textColor: theme.colors.textPrimary.color)
+                    TypographySample(label: "Headline Large", style: theme.typography.headlineLarge, sampleText: "見出し", textColor: theme.colors.textPrimary.color)
+                    TypographySample(label: "Body Large", style: theme.typography.bodyLarge, sampleText: "本文テキスト", textColor: theme.colors.textSecondary.color)
+                    TypographySample(label: "Caption Small", style: theme.typography.captionSmall, sampleText: "キャプション", textColor: theme.colors.textTertiary.color)
                 }
 
                 // Buttons Section
                 VStack(alignment: .leading, spacing: theme.spacing.sm) {
                     Text("Buttons")
-                        .font(theme.typography.headlineLarge)
-                        .foregroundColor(theme.colors.textPrimary)
+                        .font(theme.typography.headlineLarge.font)
+                        .foregroundColor(theme.colors.textPrimary.color)
 
                     Button("Primary Button") {}
                         .buttonStyle(PrimaryButtonStyle(theme: theme))
@@ -147,42 +150,68 @@ private struct DesignSystemPreview: View {
                 // Corner Radius Section
                 VStack(alignment: .leading, spacing: theme.spacing.sm) {
                     Text("Corner Radius")
-                        .font(theme.typography.headlineLarge)
-                        .foregroundColor(theme.colors.textPrimary)
+                        .font(theme.typography.headlineLarge.font)
+                        .foregroundColor(theme.colors.textPrimary.color)
 
                     HStack(spacing: theme.spacing.md) {
                         RoundedRectangle(cornerRadius: theme.cornerRadius.xs)
-                            .fill(theme.colors.primaryBrand)
+                            .fill(theme.colors.primaryBrand.color)
                             .frame(width: 50, height: 50)
                         RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
-                            .fill(theme.colors.primaryBrand)
+                            .fill(theme.colors.primaryBrand.color)
                             .frame(width: 50, height: 50)
                         RoundedRectangle(cornerRadius: theme.cornerRadius.md)
-                            .fill(theme.colors.primaryBrand)
+                            .fill(theme.colors.primaryBrand.color)
                             .frame(width: 50, height: 50)
                         RoundedRectangle(cornerRadius: theme.cornerRadius.lg)
-                            .fill(theme.colors.primaryBrand)
+                            .fill(theme.colors.primaryBrand.color)
                             .frame(width: 50, height: 50)
                     }
                 }
             }
             .padding(theme.spacing.lg)
         }
-        .background(theme.colors.backgroundPrimary)
+        .background(theme.colors.backgroundPrimary.color)
     }
 }
 
 private struct ColorSwatch: View {
-    let color: Color
+    let adaptiveColor: AdaptiveColor
     let label: String
+    var showBorder: Bool = false
 
     var body: some View {
         VStack(spacing: 4) {
             RoundedRectangle(cornerRadius: 8)
-                .fill(color)
-                .frame(width: 50, height: 50)
+                .fill(adaptiveColor.color)
+                .frame(width: 60, height: 60)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(showBorder ? 0.3 : 0), lineWidth: 1)
+                )
             Text(label)
                 .font(.caption2)
+                .foregroundColor(.secondary)
+            Text(adaptiveColor.hex)
+                .font(.system(size: 9, weight: .medium, design: .monospaced))
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
+private struct TypographySample: View {
+    let label: String
+    let style: FontStyle
+    let sampleText: String
+    let textColor: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("\(label) \(sampleText)")
+                .font(style.font)
+                .foregroundColor(textColor)
+            Text(style.description)
+                .font(.system(size: 11, weight: .regular, design: .monospaced))
                 .foregroundColor(.secondary)
         }
     }

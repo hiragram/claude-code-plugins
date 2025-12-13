@@ -60,6 +60,9 @@ Text("Hello")
     │         │
     └────┬────┘
          ▼
+   配置場所の確認
+         │
+         ▼
    Swiftコード出力
 ```
 
@@ -90,7 +93,23 @@ Text("Hello")
 2. ユーザーの要件に合わせてカラー・フォントを調整
 3. ブランドカラーがある場合は組み込む
 
-### Step 3: コード生成
+### Step 3: 配置場所の確認
+
+ファイルを配置する場所をユーザーに確認する。
+
+**選択肢**:
+| 選択肢 | 説明 | 推奨ケース |
+|-------|------|-----------|
+| Appターゲット内 | メインアプリのソースに直接配置 | 小規模アプリ、単一ターゲット構成 |
+| 別のターゲット | 専用のFrameworkやPackageとして分離 | 複数アプリで共有、チーム開発、モジュラー設計 |
+| その他の場所 | ユーザー指定のパス | 既存のプロジェクト構成に合わせる場合 |
+
+**確認事項**:
+- 既存のプロジェクト構成（ターゲット一覧、フォルダ構造）
+- 他のターゲットからの参照が必要か
+- Swift Package として管理するか
+
+### Step 4: コード生成
 
 `assets/templates/` のテンプレートをベースにカスタマイズ。
 
@@ -106,6 +125,8 @@ DesignSystem/
     ├── ButtonStyles.swift
     └── TextFieldStyles.swift
 ```
+
+配置場所によって、アクセス修飾子（`public`）の付与やモジュールインポートの設定が変わる。
 
 ## 複数テーマの作成例
 
@@ -167,3 +188,23 @@ struct ContentView: View {
 - SwiftUI の標準パターンに準拠
 - ダークモード対応を考慮
 - 注入方法（Environment等）はアプリ側で決定
+- **Preview は `#Preview` マクロではなく `PreviewProvider` を使用する**（テーマ配列の拡張性のため）
+
+```swift
+// ✅ 正しい: PreviewProvider を使用
+struct DesignSystem_Previews: PreviewProvider {
+    static var themes: [DesignSystem] = [.default, .minimal, .pop]
+
+    static var previews: some View {
+        ForEach(themes, id: \.name) { theme in
+            DesignSystemPreview(theme: theme)
+                .previewDisplayName(theme.name)
+        }
+    }
+}
+
+// ❌ 間違い: #Preview マクロは使わない
+#Preview("Theme") {
+    DesignSystemPreview(theme: .default)
+}
+```

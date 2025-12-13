@@ -35,13 +35,13 @@ struct PrimaryButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(theme.typography.buttonLarge)
+            .font(theme.typography.buttonLarge.font)
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .background(
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
-                    .fill(isEnabled ? theme.colors.primaryBrand : theme.colors.primaryBrand.opacity(0.5))
+                    .fill(isEnabled ? theme.colors.primaryBrand.color : theme.colors.primaryBrand.color.opacity(0.5))
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
@@ -60,13 +60,13 @@ struct SecondaryButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(theme.typography.buttonLarge)
-            .foregroundColor(isEnabled ? theme.colors.primaryBrand : theme.colors.primaryBrand.opacity(0.5))
+            .font(theme.typography.buttonLarge.font)
+            .foregroundColor(isEnabled ? theme.colors.primaryBrand.color : theme.colors.primaryBrand.color.opacity(0.5))
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .background(
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
-                    .stroke(isEnabled ? theme.colors.primaryBrand : theme.colors.primaryBrand.opacity(0.5), lineWidth: 1.5)
+                    .stroke(isEnabled ? theme.colors.primaryBrand.color : theme.colors.primaryBrand.color.opacity(0.5), lineWidth: 1.5)
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
@@ -85,8 +85,8 @@ struct TertiaryButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(theme.typography.buttonMedium)
-            .foregroundColor(isEnabled ? theme.colors.primaryBrand : theme.colors.primaryBrand.opacity(0.5))
+            .font(theme.typography.buttonMedium.font)
+            .foregroundColor(isEnabled ? theme.colors.primaryBrand.color : theme.colors.primaryBrand.color.opacity(0.5))
             .opacity(configuration.isPressed ? 0.6 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
@@ -104,13 +104,13 @@ struct DestructiveButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(theme.typography.buttonLarge)
+            .font(theme.typography.buttonLarge.font)
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .background(
                 RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
-                    .fill(isEnabled ? theme.colors.error : theme.colors.error.opacity(0.5))
+                    .fill(isEnabled ? theme.colors.error.color : theme.colors.error.color.opacity(0.5))
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
