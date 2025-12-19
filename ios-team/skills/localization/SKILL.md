@@ -1,30 +1,30 @@
 ---
 name: localization
-description: iOSアプリのローカライズ（多言語対応）を支援するスキル。String Catalog (.xcstrings) とxcstrings-toolを使った型安全なローカライズを実現。使用シーン：(1) プロトタイプから本番実装への書き換え時にテキストをローカライズする (2)「このテキストをローカライズして」などの明示的な指示 (3) 新しい画面や機能追加時にUIテキストのローカライズが必要な場合
+description: iOSアプリのローカライズ（多言語対応）を支援するスキル。String Catalog (.xcstrings) とXcode 26の型安全なシンボル生成機能を使ったローカライズを実現。使用シーン：(1) プロトタイプから本番実装への書き換え時にテキストをローカライズする (2)「このテキストをローカライズして」などの明示的な指示 (3) 新しい画面や機能追加時にUIテキストのローカライズが必要な場合
 ---
 
 # Localization
 
-UIテキストを型安全にローカライズする。xcstrings-toolを使用してString Catalogから生成されたSwiftコードを利用する。
+UIテキストを型安全にローカライズする。Xcode 26から追加されたString Catalogのシンボル生成機能を使用して、型安全なAPIを利用する。
 
 ## 前提条件
 
-- Xcode 15以降
+- Xcode 26以降
 - String Catalog (.xcstrings) を使用
-- xcstrings-tool がプロジェクトに導入済み
+- ビルド設定で "Generate String Catalog Symbols" を有効化
 
-## xcstrings-tool
+## Xcode 26のシンボル生成機能
 
-[liamnichols/xcstrings-tool](https://github.com/liamnichols/xcstrings-tool) はString CatalogからSwift定数を生成するSwift Package Plugin。
+Xcode 26からString Catalogに型安全なSwiftシンボル生成機能が追加された。これにより、外部ツールなしで型安全なローカライズが実現できる。
 
-### 導入方法
+### 有効化方法
 
-```swift
-// Package.swift または Xcode の Package Dependencies
-.package(url: "https://github.com/liamnichols/xcstrings-tool", from: "1.0.0")
-```
+**新規プロジェクト**: デフォルトで有効
 
-Build Phasesでプラグインを有効化すると、ビルド時にSwiftコードが自動生成される。
+**既存プロジェクト**:
+1. Build Settings を開く
+2. "Generate String Catalog Symbols" を検索
+3. `Yes` に設定
 
 ## ワークフロー
 
@@ -40,13 +40,13 @@ UIテキストの実装
          ▼
 ┌──────────────────┐
 │ String Catalogに │
-│ キーを追加       │
+│ キーと値を追加   │
 └────────┬─────────┘
          │
          ▼
 ┌──────────────────┐
-│ 生成されたコードで │
-│ 置き換え          │
+│ 生成されたシンボル│
+│ で置き換え       │
 └────────┬─────────┘
          │
          ▼
@@ -67,13 +67,15 @@ Text("設定")
 Button("保存") { ... }
 .navigationTitle("プロフィール")
 
-// ✅ ローカライズ済み
-Text(.localizable(.settings))
-Button(.localizable(.save)) { ... }
-.navigationTitle(.localizable(.profileTitle))
+// ✅ ローカライズ済み（Xcode 26シンボル）
+Text(.settings)
+Button(.save) { ... }
+.navigationTitle(.profileTitle)
 ```
 
 ### パラメータ付き文字列
+
+String Catalogでプレースホルダを定義すると、関数として生成される：
 
 ```swift
 // ❌ ハードコード
@@ -81,11 +83,11 @@ Text("\(count)件の通知")
 Text("こんにちは、\(userName)さん")
 
 // ✅ ローカライズ済み
-// String Catalog: "notifications_count" = "%lld件の通知"
-Text(.localizable(.notificationsCount(count)))
+// String Catalog: キー "notificationsCount", 値 "%lld件の通知"
+Text(.notificationsCount(count))
 
-// String Catalog: "greeting" = "こんにちは、%@さん"
-Text(.localizable(.greeting(userName)))
+// String Catalog: キー "greeting", 値 "こんにちは、%@さん"
+Text(.greeting(userName))
 ```
 
 ### 複数形対応
@@ -94,12 +96,33 @@ String Catalogで複数形バリエーションを定義：
 
 | Key | Plural | Value |
 |-----|--------|-------|
-| items_count | zero | アイテムがありません |
-| items_count | one | %lld件のアイテム |
-| items_count | other | %lld件のアイテム |
+| itemsCount | zero | アイテムがありません |
+| itemsCount | one | %lld件のアイテム |
+| itemsCount | other | %lld件のアイテム |
 
 ```swift
-Text(.localizable(.itemsCount(items.count)))
+Text(.itemsCount(items.count))
+```
+
+### String として取得
+
+```swift
+let message = String(localized: .errorMessage)
+```
+
+### カスタムビューでの使用
+
+```swift
+struct CustomView: View {
+    let title: LocalizedStringResource
+
+    var body: some View {
+        Text(title)
+    }
+}
+
+// 使用側
+CustomView(title: .customTitle)
 ```
 
 ## String Catalogの構造
@@ -116,17 +139,59 @@ MyApp/
 
 | パターン | 例 |
 |---------|-----|
-| 画面名_要素 | `settings_title`, `profile_saveButton` |
-| 機能_アクション | `auth_loginButton`, `cart_checkoutButton` |
-| 共通_用途 | `common_ok`, `common_cancel`, `common_error` |
+| 画面名_要素 | `settingsTitle`, `profileSaveButton` |
+| 機能_アクション | `authLoginButton`, `cartCheckoutButton` |
+| 共通_用途 | `commonOk`, `commonCancel`, `commonError` |
+
+### 生成されるシンボル名
+
+| String Catalog キー | 生成されるシンボル |
+|--------------------|------------------|
+| `settings_title` | `.settingsTitle` |
+| `login-button` | `.loginButton` |
+| `SAVE_BUTTON` | `.saveButton` |
+
+スネークケース、ケバブケース、大文字はcamelCaseに変換される。
+
+## #bundle マクロ（フレームワーク向け）
+
+フレームワークやSwift Packageでリソースを参照する場合：
+
+```swift
+// 旧（Bundle.module）
+Text("Hello", bundle: Bundle.module)
+
+// 新（#bundle マクロ）
+Text("Hello", bundle: #bundle)
+```
+
+`#bundle`マクロは実行コンテキストに応じて適切なバンドルを自動解決する。
 
 ## プロトタイプからの変換手順
+
+### 手動変換
 
 1. **テキスト抽出**: ハードコードされた日本語テキストを特定
 2. **キー設計**: 適切なキー名を決定
 3. **Catalog追加**: String Catalogにキーと翻訳を追加
-4. **コード置換**: 生成された型安全なAPIで置き換え
+4. **コード置換**: 生成されたシンボルで置き換え
 5. **ビルド確認**: 正常にビルドできることを確認
+
+### リファクタリング機能を使用
+
+Xcode 26では、既存のハードコードされた文字列を一括でシンボルに変換できる：
+
+1. 文字列を選択
+2. 右クリック → **Refactor** → **Convert Strings to Symbols**
+3. 自動的にString Catalogにエントリが追加され、コードがシンボル参照に変換される
+
+```swift
+// 変換前
+Text("42件の新規投稿")
+
+// 変換後（自動）
+Text(.feedTitle(newPosts: 42))
+```
 
 ### 変換例
 
@@ -154,29 +219,52 @@ struct SettingsView: View {
 struct SettingsView: View {
     var body: some View {
         List {
-            Section(.localizable(.settingsSectionAccount)) {
-                Text(.localizable(.settingsEditProfile))
-                Text(.localizable(.settingsChangePassword))
+            Section(.settingsSectionAccount) {
+                Text(.settingsEditProfile)
+                Text(.settingsChangePassword)
             }
-            Section(.localizable(.settingsSectionApp)) {
-                Text(.localizable(.settingsNotifications))
-                Text(.localizable(.settingsLanguage))
+            Section(.settingsSectionApp) {
+                Text(.settingsNotifications)
+                Text(.settingsLanguage)
             }
         }
-        .navigationTitle(.localizable(.settingsTitle))
+        .navigationTitle(.settingsTitle)
     }
 }
+```
+
+## テーブル別の整理
+
+大規模プロジェクトでは、機能ごとにString Catalogを分割できる：
+
+```
+Resources/
+├── Localizable.xcstrings      # 共通
+├── Settings.xcstrings         # 設定画面
+└── Onboarding.xcstrings       # オンボーディング
+```
+
+非デフォルトテーブルのシンボルはネストされる：
+```swift
+Text(.Settings.title)
+Text(.Onboarding.welcomeMessage)
 ```
 
 ## リファレンス
 
 | ファイル | 内容 |
 |---------|------|
-| `references/xcstrings-tool.md` | xcstrings-toolの詳細な使い方 |
+| `references/symbol-generation.md` | シンボル生成機能の詳細 |
 
 ## 注意事項
 
-- キーは英語のスネークケース（`login_button`）を推奨
+- キーは英語のcamelCaseまたはスネークケースを推奨
 - 同じテキストでも文脈が異なれば別キーにする
 - パラメータの順序は言語によって変わる可能性があるため、位置指定子（`%1$@`）の使用を検討
 - アクセシビリティラベルもローカライズ対象
+- Xcode 25以前のプロジェクトでは、xcstrings-toolなどの外部ツールが必要
+
+## 参考リンク
+
+- [Explore localization with Xcode - WWDC25](https://developer.apple.com/videos/play/wwdc2025/225/)
+- [What's new in Xcode 26 - WWDC25](https://developer.apple.com/videos/play/wwdc2025/247/)
