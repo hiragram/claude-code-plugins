@@ -8,6 +8,11 @@
       "name": "ios-team",
       "source": "./ios-team",
       "description": "iOSアプリ開発チーム"
+    },
+    {
+      "name": "project-manager",
+      "source": "./project-manager",
+      "description": "エンジニアリングチームとのコミュニケーション・状況理解を支援するプラグイン"
     }
   ]
 }
