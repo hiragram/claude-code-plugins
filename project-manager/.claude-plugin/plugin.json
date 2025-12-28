@@ -1,0 +1,14 @@
+{
+  "name": "project-manager",
+  "version": "0.1.0",
+  "description": "エンジニアリングチームとのコミュニケーション・状況理解を支援するプラグイン",
+  "mcpServers": {
+    "nanobanana": {
+      "command": "uv",
+      "args": ["run", "--python", "3.11", "--with", "mcp", "--with", "google-genai>=1.52.0", "--with", "Pillow", "python", "${CLAUDE_PLUGIN_ROOT}/mcp-servers/nanobanana/server.py"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    }
+  }
+}

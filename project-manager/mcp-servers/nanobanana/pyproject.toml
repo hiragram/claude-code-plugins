@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nanobanana-mcp"
+version = "0.1.0"
+description = "Nano Banana Pro MCP Server for image generation"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "google-genai>=1.52.0",
+    "Pillow>=10.0.0",
+]
+
+[project.scripts]
+nanobanana-mcp = "server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
