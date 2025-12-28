@@ -137,7 +137,7 @@ STYLE REQUIREMENTS:
 - Central concept in the middle, related concepts radiating outward
 - Use visual hierarchy: larger = more important
 - Include small icons/doodles as visual anchors
-- Whiteboard or paper-like background
+- CLEAN SOLID WHITE BACKGROUND - no texture, no paper grain, no stains, no noise, no decorative elements on background
 - Japanese text for all labels
 - Include SPECIFIC DETAILS, not just topic titles
 
@@ -163,6 +163,7 @@ COLOR SCHEME:
 - 「clean」「organized」「structured」（有機的な配置の逆）
 - 番号付きリストの指示
 - **タイトルだけで中身がない薄い図**
+- **背景のテクスチャ、紙の質感、汚れ、装飾ノイズ**（圧縮効率が悪くなる）
 
 ### 6. 結果の提示
 
