@@ -1,0 +1,8 @@
+{
+  "name": "vibestudio",
+  "description": "Claude Codeの会話をvibestudio発話サーバーに送信して音声読み上げを行う",
+  "version": "0.1.0",
+  "author": {
+    "name": "hiragram"
+  }
+}
