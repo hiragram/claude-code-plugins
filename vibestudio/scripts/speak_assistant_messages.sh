@@ -15,6 +15,13 @@ fi
 VIBESTUDIO_TMP="/tmp/vibestudio"
 mkdir -p "$VIBESTUDIO_TMP"
 LAST_TS_FILE="$VIBESTUDIO_TMP/last_timestamp_${SESSION_ID}"
+LOCK_DIR="$VIBESTUDIO_TMP/lock_${SESSION_ID}.d"
+
+# 排他制御: 既に別のプロセスが処理中なら即終了
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+  exit 0
+fi
+trap 'rmdir "$LOCK_DIR" 2>/dev/null' EXIT
 
 # 前回発話したタイムスタンプを取得（なければ現在時刻を記録して終了）
 if [ ! -f "$LAST_TS_FILE" ]; then
@@ -56,6 +63,12 @@ while IFS= read -r line; do
     continue
   fi
 
+  # syntheticメッセージ（システム生成）はスキップ
+  MODEL=$(echo "$line" | jq -r '.message.model // empty' 2>/dev/null)
+  if [ "$MODEL" = "<synthetic>" ]; then
+    continue
+  fi
+
   # テキストを取得
   TEXT=$(echo "$line" | jq -r '.message.content[]? | select(.type == "text") | .text' 2>/dev/null)
   if [ -z "$TEXT" ]; then
@@ -65,8 +78,8 @@ while IFS= read -r line; do
   # 発話リクエスト送信
   curl -s -X POST http://localhost:3000/api/speak \
     -H "Content-Type: application/json" \
-    -d "$(jq -n --arg text "$TEXT" --arg personaId "$SESSION_ID" \
-      '{text: $text, speaker: "assistant", personaId: $personaId}')" \
+    -d "$(jq -n --arg text "$TEXT" --arg sessionId "$SESSION_ID" \
+      '{text: $text, speaker: "assistant", sessionId: $sessionId}')" \
     >/dev/null 2>&1 || true
 
   # 最新のタイムスタンプを更新
