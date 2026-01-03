@@ -13,6 +13,11 @@
       "name": "project-manager",
       "source": "./project-manager",
       "description": "エンジニアリングチームとのコミュニケーション・状況理解を支援するプラグイン"
+    },
+    {
+      "name": "vibestudio",
+      "source": "./vibestudio",
+      "description": "Claude Codeの会話をvibestudio発話サーバーに送信して音声読み上げを行う"
     }
   ]
 }
