@@ -13,8 +13,8 @@ fi
 # 発話リクエスト送信（失敗しても無視）
 curl -s -X POST http://localhost:3000/api/speak \
   -H "Content-Type: application/json" \
-  -d "$(jq -n --arg text "$PROMPT" --arg personaId "$SESSION_ID" \
-    '{text: $text, speaker: "user", personaId: $personaId}')" \
+  -d "$(jq -n --arg text "$PROMPT" --arg sessionId "$SESSION_ID" \
+    '{text: $text, speaker: "user", sessionId: $sessionId}')" \
   >/dev/null 2>&1 || true
 
 exit 0
