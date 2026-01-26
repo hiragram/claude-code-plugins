@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stop: 未発話のassistantメッセージを発話（最終発話なのでロック待機あり）
+# Stop: 未発話のメッセージを発話（最終発話なのでロック待機あり）
 
 # デバッグログ
 DEBUG_LOG="/tmp/vibestudio/debug_stop.log"

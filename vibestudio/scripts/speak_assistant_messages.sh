@@ -49,7 +49,7 @@ LAST_TS=$(cat "$LAST_TS_FILE")
 LATEST_TS=""
 while IFS= read -r line; do
   ROLE=$(echo "$line" | jq -r '.message.role // empty' 2>/dev/null)
-  if [ "$ROLE" != "assistant" ]; then
+  if [ "$ROLE" != "assistant" ] && [ "$ROLE" != "user" ]; then
     continue
   fi
 

@@ -1,0 +1,5 @@
+{
+  "name": "code-review",
+  "version": "0.1.0",
+  "description": "PRを5つの観点から並列レビューするプラグイン"
+}

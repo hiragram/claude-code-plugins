@@ -35,8 +35,8 @@ done)
 if [ -n "$LATEST_TS" ]; then
   echo "$LATEST_TS" > "$LAST_TS_FILE"
 else
-  # 新規セッション（assistantメッセージがまだない）場合は現在時刻を設定
-  date -u +"%Y-%m-%dT%H:%M:%S.000Z" > "$LAST_TS_FILE"
+  # 新規セッション（assistantメッセージがまだない）場合は十分過去の時刻を設定
+  echo "1970-01-01T00:00:00.000Z" > "$LAST_TS_FILE"
 fi
 
 exit 0

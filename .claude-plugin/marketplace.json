@@ -18,6 +18,11 @@
       "name": "vibestudio",
       "source": "./vibestudio",
       "description": "Claude Codeの会話をvibestudio発話サーバーに送信して音声読み上げを行う"
+    },
+    {
+      "name": "code-review",
+      "source": "./code-review",
+      "description": "PRを5つの観点から並列レビューするプラグイン"
     }
   ]
 }
