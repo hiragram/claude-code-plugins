@@ -19,6 +19,15 @@ color: red
 ## 入力情報
 
 このエージェントは以下の情報を受け取ります:
+
+**ファイル単位レビューの場合**（review-local経由）:
+- `base_ref`: 比較元ブランチ（例: `main`, `origin/main`）
+- `head_ref`（省略可）: 比較先ブランチ（例: `origin/feature-branch`）。省略時はワーキングツリーとの比較
+- `file_path`: レビュー対象のファイルパス
+- プロジェクトルール（CLAUDE.mdの内容、あれば）
+- この場合、`git diff [base_ref] [head_ref] -- [file_path]` を自分で実行してdiffを取得すること
+
+**全diff渡しの場合**（review-pr経由）:
 - PR diff（変更差分）
 - プロジェクトルール（CLAUDE.mdの内容、あれば）
 - owner/repo と pr-number

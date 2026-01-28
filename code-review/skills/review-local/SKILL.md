@@ -1,12 +1,12 @@
 ---
 name: review-local
-description: ローカルの未コミット変更を含むmainブランチとの差分を5つの観点からレビューする。コミット前のコードチェックに使用。
+description: ローカルの未コミット変更を含むmainブランチとの差分、またはPRの差分を5つの観点からレビューする。コミット前のコードチェックやPRレビューに使用。
 user-invocable: true
 ---
 
 # ローカルレビュースキル
 
-mainブランチとの差分（未コミット変更含む）を5つの専門エージェントで並列レビューし、Markdown形式で指摘を出力します。
+mainブランチとの差分（未コミット変更含む）、またはPR番号を指定してその差分を、5つの専門エージェントでファイル単位に並列レビューし、Markdownレポートを出力します。
 
 ## 概要
 
@@ -21,23 +21,25 @@ mainブランチとの差分（未コミット変更含む）を5つの専門エ
 ## 使い方
 
 ```
-/review-local [base-branch]
+/review-local [base-branch | #PR番号]
 ```
 
 ### 例
 
 ```
-/review-local           # mainブランチとの差分をレビュー
-/review-local develop   # developブランチとの差分をレビュー
+/review-local           # 現在ブランチ vs main をレビュー
+/review-local develop   # 現在ブランチ vs develop をレビュー
+/review-local #123      # PR #123 の差分をレビュー（fetch して取得）
 ```
 
 ## 実行手順
 
 ### Step 1: 引数の解析
 
-`$ARGUMENTS` を解析してベースブランチを決定します:
-- 引数があれば、その値をベースブランチとして使用
-- 引数がなければ `main` を使用
+`$ARGUMENTS` を解析して対象を決定します:
+- `#数字` の場合: PR番号として扱い、PRのブランチ情報を取得
+- ブランチ名の場合: そのブランチをベースとして使用
+- 引数なしの場合: `main` をベースとして使用
 
 ### Step 2: オーケストレーターエージェントの起動
 
@@ -46,7 +48,7 @@ mainブランチとの差分（未コミット変更含む）を5つの専門エ
 ```
 Task tool の呼び出し:
 - subagent_type: code-review:review-local-orchestrator
-- prompt: "ベースブランチ '[base-branch]' との差分をレビューしてください。"
+- prompt: "対象: '[引数]'（ベースブランチまたはPR番号）のレビューを実行してください。"
 - run_in_background: false（結果を待つ場合）または true（バックグラウンド実行の場合）
 ```
 
