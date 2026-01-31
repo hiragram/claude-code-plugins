@@ -21,16 +21,25 @@ mainブランチとの差分（未コミット変更含む）、またはPR番�
 ## 使い方
 
 ```
-/review-local [base-branch | #PR番号]
+/review-local [base-branch | #PR番号] [追加の指示]
 ```
 
 ### 例
 
 ```
-/review-local           # 現在ブランチ vs main をレビュー
-/review-local develop   # 現在ブランチ vs develop をレビュー
-/review-local #123      # PR #123 の差分をレビュー（fetch して取得）
+/review-local                            # レビュー → 指摘があれば修正 → 再レビュー案内
+/review-local develop                    # develop との差分をレビュー → 修正対応
+/review-local #123                       # PR #123 の差分をレビュー → 修正対応
+/review-local 開いて                      # レビュー後にVSCodeでレポートを開く（修正は手動）
+/review-local develop 終わったら開いて    # develop との差分をレビューし、VSCodeで開く
 ```
+
+### 動作モード
+
+| 引数 | 動作 |
+|-----|------|
+| なし / ブランチ名 / PR番号のみ | レビュー → 自動修正 → 再レビュー案内 |
+| 「開いて」「open」等を含む | レビュー → VSCodeでレポートを開く |
 
 ## 実行手順
 
@@ -115,7 +124,7 @@ mainブランチとの差分（未コミット変更含む）、またはPR番�
 
 ファイル×観点の結果を、**観点ごとにグルーピング**して集約します。
 
-### Step 4: レポート保存とVSCodeで開く
+### Step 4: レポート保存と後続アクション
 
 集約したMarkdownレポートを以下の手順で出力します:
 
@@ -125,10 +134,18 @@ mainブランチとの差分（未コミット変更含む）、またはPR番�
    # 例: /tmp/review-local-20260128-143022.md
    ```
 
-2. VSCodeで開く:
+2. 後続アクションの分岐:
+
+   **`$ARGUMENTS` に「開いて」「open」などVSCodeで開く指示がある場合:**
    ```bash
    code /tmp/review-local-YYYYMMDD-HHmmss.md
    ```
+
+   **それ以外（引数なし、またはブランチ/PR指定のみ）の場合:**
+   - レポートファイルを読み込み、指摘内容を確認
+   - 指摘があれば、該当ファイルを修正
+   - 修正完了後、再度 `/review-local` を実行してレビューを受けるようユーザーに案内
+   - 指摘がなければ「指摘事項なし」と報告して完了
 
 ## 出力形式
 
