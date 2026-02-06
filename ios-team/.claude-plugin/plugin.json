@@ -21,12 +21,6 @@
                 "-y",
                 "xcodebuildmcp@latest"
             ]
-        },
-        "xcode": {
-            "command": "xcrun",
-            "args": [
-                "mcpbridge"
-            ]
         }
     },
     "author": {
