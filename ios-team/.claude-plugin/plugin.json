@@ -21,6 +21,10 @@
                 "-y",
                 "xcodebuildmcp@latest"
             ]
+        },
+        "firebase": {
+            "command": "npx",
+            "args": ["-y", "firebase-tools@latest", "mcp"]
         }
     },
     "author": {
