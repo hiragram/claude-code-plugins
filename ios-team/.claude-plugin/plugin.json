@@ -1,7 +1,7 @@
 {
     "name": "ios-team",
     "description": "iOSアプリ開発チーム",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "mcpServers": {
         "pbxproj": {
             "command": "swx",
@@ -24,7 +24,11 @@
         },
         "firebase": {
             "command": "npx",
-            "args": ["-y", "firebase-tools@latest", "mcp"]
+            "args": [
+                "-y",
+                "firebase-tools@latest",
+                "mcp"
+            ]
         }
     },
     "author": {
